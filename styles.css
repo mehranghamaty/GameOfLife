@@ -80,6 +80,25 @@ button:disabled {
     box-shadow: none;
 }
 
+#recordBtn {
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+}
+
+#recordBtn.recording {
+    background: linear-gradient(135deg, #dc3545 0%, #e74c3c 100%);
+    animation: pulse 1s infinite;
+}
+
+#downloadVideoBtn {
+    background: linear-gradient(135deg, #6f42c1 0%, #e83e8c 100%);
+}
+
+@keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.7; }
+    100% { opacity: 1; }
+}
+
 .speed-control, .size-control {
     display: flex;
     align-items: center;

@@ -14,6 +14,13 @@ class GameOfLife {
         this.isDragging = false;
         this.paintMode = true; // true for painting alive cells, false for erasing
         
+        // Video recording variables
+        this.isRecording = false;
+        this.mediaRecorder = null;
+        this.recordedChunks = [];
+        this.recordingStartTime = null;
+        this.maxRecordingTime = 30000; // 30 seconds max
+        
         this.initializeElements();
         this.createGrid();
         this.setupEventListeners();
@@ -30,6 +37,8 @@ class GameOfLife {
         this.clearBtn = document.getElementById('clearBtn');
         this.randomBtn = document.getElementById('randomBtn');
         this.stepBtn = document.getElementById('stepBtn');
+        this.recordBtn = document.getElementById('recordBtn');
+        this.downloadVideoBtn = document.getElementById('downloadVideoBtn');
         this.speedSlider = document.getElementById('speedSlider');
         this.speedValue = document.getElementById('speedValue');
         this.gridSizeSelect = document.getElementById('gridSize');
@@ -43,6 +52,8 @@ class GameOfLife {
         this.clearBtn.addEventListener('click', () => this.clear());
         this.randomBtn.addEventListener('click', () => this.randomize());
         this.stepBtn.addEventListener('click', () => this.step());
+        this.recordBtn.addEventListener('click', () => this.toggleRecording());
+        this.downloadVideoBtn.addEventListener('click', () => this.downloadVideo());
         
         this.speedSlider.addEventListener('input', (e) => {
             this.speed = parseInt(e.target.value);
@@ -356,6 +367,116 @@ class GameOfLife {
         
         this.draw();
         this.updateStats();
+    }
+    
+    toggleRecording() {
+        if (!this.isRecording) {
+            this.startRecording();
+        } else {
+            this.stopRecording();
+        }
+    }
+    
+    async startRecording() {
+        try {
+            // Check if MediaRecorder is supported
+            if (!MediaRecorder.isTypeSupported('video/webm')) {
+                alert('Video recording is not supported in this browser. Try Chrome or Firefox.');
+                return;
+            }
+            
+            // Get canvas stream
+            const stream = this.canvas.captureStream(30); // 30 FPS
+            
+            this.mediaRecorder = new MediaRecorder(stream, {
+                mimeType: 'video/webm;codecs=vp9'
+            });
+            
+            this.recordedChunks = [];
+            this.recordingStartTime = Date.now();
+            
+            this.mediaRecorder.ondataavailable = (event) => {
+                if (event.data.size > 0) {
+                    this.recordedChunks.push(event.data);
+                }
+            };
+            
+            this.mediaRecorder.onstop = () => {
+                const blob = new Blob(this.recordedChunks, { type: 'video/webm' });
+                this.videoBlob = blob;
+                this.downloadVideoBtn.disabled = false;
+                this.recordBtn.disabled = false;
+                this.recordBtn.textContent = 'Start Recording';
+                this.recordBtn.classList.remove('recording');
+            };
+            
+            this.mediaRecorder.start();
+            this.isRecording = true;
+            this.recordBtn.textContent = 'Stop Recording';
+            this.recordBtn.classList.add('recording');
+            this.downloadVideoBtn.disabled = true;
+            
+            // Start the simulation if it's not running
+            if (!this.isRunning) {
+                this.start();
+            }
+            
+            // Auto-stop after max time
+            this.recordingTimeout = setTimeout(() => {
+                if (this.isRecording) {
+                    this.stopRecording();
+                }
+            }, this.maxRecordingTime);
+            
+            // Update button with timer
+            this.updateRecordingTimer();
+            
+        } catch (error) {
+            console.error('Error starting recording:', error);
+            alert('Failed to start recording. Please try again.');
+        }
+    }
+    
+    stopRecording() {
+        if (this.mediaRecorder && this.isRecording) {
+            this.mediaRecorder.stop();
+            this.isRecording = false;
+            
+            if (this.recordingTimeout) {
+                clearTimeout(this.recordingTimeout);
+            }
+            
+            if (this.timerInterval) {
+                clearInterval(this.timerInterval);
+            }
+        }
+    }
+    
+    updateRecordingTimer() {
+        this.timerInterval = setInterval(() => {
+            if (this.isRecording) {
+                const elapsed = Math.floor((Date.now() - this.recordingStartTime) / 1000);
+                const remaining = Math.floor(this.maxRecordingTime / 1000) - elapsed;
+                this.recordBtn.textContent = `Recording... ${remaining}s`;
+                
+                if (remaining <= 0) {
+                    this.stopRecording();
+                }
+            }
+        }, 1000);
+    }
+    
+    downloadVideo() {
+        if (this.videoBlob) {
+            const url = URL.createObjectURL(this.videoBlob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `game-of-life-${new Date().toISOString().slice(0, 19).replace(/:/g, '-')}.webm`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
     }
 }
 

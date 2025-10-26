@@ -19,6 +19,8 @@
             <button id="clearBtn">Clear</button>
             <button id="randomBtn">Random</button>
             <button id="stepBtn">Step</button>
+            <button id="recordBtn">Start Recording</button>
+            <button id="downloadVideoBtn" disabled>Download Video</button>
             
             <div class="speed-control">
                 <label for="speedSlider">Speed:</label>
@@ -64,6 +66,16 @@
                 <li>Any live cell with 2 or 3 live neighbors survives</li>
                 <li>Any dead cell with exactly 3 live neighbors becomes alive</li>
                 <li>All other live cells die, and all other dead cells stay dead</li>
+            </ul>
+            
+            <h3>Video Recording</h3>
+            <ul>
+                <li>Click "Start Recording" to begin capturing the simulation as video</li>
+                <li>Recording automatically starts the simulation if not running</li>
+                <li>Maximum recording time: 30 seconds</li>
+                <li>Shows countdown timer while recording</li>
+                <li>Downloads as WebM video format (supported by most browsers)</li>
+                <li>Can be converted to GIF using online tools if needed</li>
             </ul>
         </div>
     </div>
