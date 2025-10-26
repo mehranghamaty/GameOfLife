@@ -1,0 +1,235 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: #333;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+header {
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    color: white;
+    padding: 30px;
+    text-align: center;
+}
+
+header h1 {
+    font-size: 2.5em;
+    margin-bottom: 10px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+header p {
+    font-size: 1.1em;
+    opacity: 0.9;
+}
+
+.controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    align-items: center;
+    justify-content: center;
+    padding: 25px;
+    background: #f8f9fa;
+    border-bottom: 1px solid #dee2e6;
+}
+
+button {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+}
+
+button:active {
+    transform: translateY(0);
+}
+
+button:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.speed-control, .size-control {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: white;
+    padding: 10px 15px;
+    border-radius: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.speed-control label, .size-control label {
+    font-weight: 600;
+    color: #495057;
+}
+
+input[type="range"] {
+    width: 120px;
+    cursor: pointer;
+}
+
+select {
+    border: 2px solid #dee2e6;
+    border-radius: 8px;
+    padding: 5px 10px;
+    background: white;
+    cursor: pointer;
+}
+
+.stats {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    padding: 20px;
+    background: #e9ecef;
+    font-weight: 600;
+    font-size: 1.1em;
+}
+
+.stats div {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.stats span {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 5px 12px;
+    border-radius: 15px;
+    min-width: 40px;
+    text-align: center;
+}
+
+.canvas-container {
+    display: flex;
+    justify-content: center;
+    margin: 20px;
+}
+
+#gameCanvas {
+    border: 2px solid #dee2e6;
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    cursor: crosshair;
+    background: white;
+}
+
+.patterns {
+    padding: 25px;
+    background: #f8f9fa;
+    border-top: 1px solid #dee2e6;
+}
+
+.patterns h3 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #495057;
+    font-size: 1.3em;
+}
+
+.pattern-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+}
+
+.pattern-buttons button {
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    padding: 8px 16px;
+    font-size: 12px;
+}
+
+.rules {
+    padding: 25px;
+    background: #e9ecef;
+}
+
+.rules h3 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #495057;
+    font-size: 1.3em;
+}
+
+.rules ul {
+    max-width: 600px;
+    margin: 0 auto;
+    list-style: none;
+}
+
+.rules li {
+    background: white;
+    margin: 10px 0;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    border-left: 4px solid #667eea;
+}
+
+.rules li::before {
+    content: "→";
+    color: #667eea;
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+@media (max-width: 768px) {
+    .controls {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .stats {
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+    }
+    
+    .pattern-buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .cell {
+        width: 12px;
+        height: 12px;
+    }
+    
+    header h1 {
+        font-size: 2em;
+    }
+}
